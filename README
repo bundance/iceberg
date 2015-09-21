@@ -1,5 +1,3 @@
-Dev in Test - Recruitment Task
-
 Implement the following user story in JavaScript / AngularJS, using TDD/BDD/ATDD.
 Write acceptance tests in Protractor and unit tests as you see fit.
 
@@ -25,8 +23,6 @@ Acceptance Criteria
 	- For each movie, both Title and Year are displayed
 
  - When the search phrase does not match any movies, the following message should be displayed: 'No matching items'
-
-
 
 
 Commands to run:
