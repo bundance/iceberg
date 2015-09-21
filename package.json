@@ -13,7 +13,7 @@
   },
   "scripts": {
     "postinstall": "node_modules/protractor/bin/webdriver-manager update",
-    "start": "http-server -p 3000",
+    "start": "http-server -p 3000 --cors",
     "e2e": "protractor protractor.conf.js",
     "unit": "karma start karma.conf.js"
   }
