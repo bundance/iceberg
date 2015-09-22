@@ -43,15 +43,11 @@
 
             function _formatData(data, params){
                 return (params)
-                    ? _slice(
-                            _sort(data,
-    //                            _filter(data, params.filters),
-                                    params.sort,
-                                    params.order
-                            ),
-                            params.page,
-                            params.per_page
-                    )
+                    ? _slice(_sort(_filter(data, params.filters),
+                                   params.sort,
+                                   params.order),
+                             params.page,
+                             params.per_page)
                     : data;
             }
 
@@ -66,39 +62,20 @@
             }
 
             function _filter(data, filters){
-                return (filters)
-                    ? _.filter(data, function(hotel){
-                        // ToDo: refactor _filter to curry the function so it accepts the filters as an extensible
-                        // list of arguments
-                        return _withinPriceRange(hotel.MinCost, filters.priceMin, filters.priceMax)
-                            && _atLeast(hotel.Stars, filters.stars)
-                            && _atLeast(hotel.UserRating, filters.userRating)
-                            && _checkFilters(hotel, filters);
-                        })
-                        : data;
-
-                function _withinPriceRange(price, priceMin, priceMax){
-                    priceMin = priceMin || price;
-                    priceMax = priceMax || price;
-
-                    return (price >= priceMin && price <= priceMax);
+                if(!filters){
+                    return data;
                 }
 
-                function _atLeast(value, requiredValue){
-                    return (requiredValue)
-                        ? value >= requiredValue
-                        : true;
-                }
+                _.each(filters, function(filterFn){
+                    data = _filterData(data, filterFn);
+                });
 
-                // Matches filters to property names in a hotel object. If a filter name doesn't match a hotel
-                // object property name, it won't be checked here
-                function _checkFilters(hotel, filters){
-                    return _.every(_.map(_.keys(hotel), function(key){
-                        return (filters[key]) ? hotel[key] === filters[key] : true;
-                    }));
+                return data;
+
+                function _filterData(data, filterFn){
+                    return _.filter(data, filterFn);
                 }
             }
-
         }
 
         function _getDataFromSource(){

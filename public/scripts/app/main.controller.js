@@ -11,11 +11,21 @@
 
         var vm = this;
 
+        var filterFns = {
+            filterFn: function (item) {
+                var lowerCaseFilterText = vm.model.filterText.toLowerCase(),
+                    lowerCaseTitle = item.title.toLowerCase();
+
+                return (lowerCaseTitle.substr(0, lowerCaseFilterText.length ) === lowerCaseFilterText);
+            }
+        };
+
         // Initialise controller's model
         vm.model = {
             page: 1,
             pages: [],
-            filters: {}
+            filterText: '',
+            filters: []
         };
 
         // Setup the Paginator
@@ -23,28 +33,17 @@
         // Enable sorting
         vm.toggleSort = toggleSort;
         // Enable filtering
-        vm.applyFilters = applyFilters;
-        vm.setFilter = setFilter;
+        vm.applyFilter = applyFilter;
         vm.filterBy = {};
+        vm.showNoMoviesMessage = false;
+
+        vm.filterMovies = _.debounce(function(){
+            vm.paginator.getPage(1, 'title', 'asc', filterFns)
+                .then(function(data){
+                    vm.showNoMoviesMessage = (data.length === 0);
+                });
+        }, 5);
         // Initialise the price range sorter
-        vm.priceRangeSlider = {
-            min: 0,
-            max: 10000,
-            step: 20,
-            precision: 2,
-            orientation: 'horizontal',
-            handle: 'round',
-            tooltip: 'show',
-            tooltipseparator: ':',
-            tooltipsplit: false,
-            enabled: true,
-            naturalarrowkeys: false,
-            range: true,
-            ngDisabled: false,
-            reversed: false,
-            value: 0,
-            sliderValue: [this.min, this.max]
-        };
 
         // Initialisation
         activate();
@@ -63,26 +62,6 @@
                 function (newPageNum) {
                     _getPage(newPageNum);
                 });
-
-//            $scope.$watch(function(){
-//                    return vm.priceRangeSlider.sliderValue[0];
-//                },
-//                function(newValue){
-//                    if(newValue){
-//                        vm.model.filters.priceMin = vm.priceRangeSlider.sliderValue[0];
-//                        vm.paginator.getPage(1, vm.model.sortColumn, vm.model.sortAscending, vm.model.filters);
-//                    }
-//                });
-//
-//            $scope.$watch(function(){
-//                    return vm.priceRangeSlider.sliderValue[1];
-//                },
-//                function(newValue){
-//                    if(newValue){
-//                        vm.model.filters.priceMax = vm.priceRangeSlider.sliderValue[1];
-//                        vm.paginator.getPage(1, vm.model.sortColumn, vm.model.sortAscending, vm.model.filters);
-//                    }
-//                });
 
             /*  Helper function  */
             function _getPage(pageNum) {
@@ -113,14 +92,10 @@
                 })
         }
 
-        function applyFilters(columnName, value){
-            //vm.model.filters[columnName] = value;
-            vm.paginator.getPage(1, vm.model.sortColumn, vm.model.sortAscending, vm.model.filters);
+        function applyFilter(){
+            vm.paginator.getPage(1, 'title', 'asc', filterFns);
         }
 
-        function setFilter(columnName, value){
-            vm.model.filters[columnName] = value;
-        }
 
     }
 })();
