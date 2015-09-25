@@ -4,10 +4,23 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'public/js/lib/angular.js',
-            'public/js/lib/angular-mocks.js',
-            'public/js/**/*.js',
-            'test/unit/**/*.spec.js'
+            'public/bower_components/angular/angular.js',
+            'public/bower_components/angular-mocks/angular-mocks.js',
+            'public/bower_components/angular-resource/angular-resource.js',
+            'public/bower_components/angular-sanitize/angular-sanitize.js',
+            'public/bower_components/angular-route/angular-route.js',
+            'public/bower_components/underscore/underscore.js',
+            'public/scripts/app/app.js',
+            'public/scripts/components/**/*.module.js',
+            'public/scripts/components/**/*.service.js',
+            'public/scripts/components/**/*.controller.js',
+            'public/scripts/components/**/*.directive.js',
+            'public/scripts/app/*.controller.js',
+            'public/scripts/app/*.service.js',
+            'public/scripts/testing/jasmineMatchers/*.js',
+            'public/scripts/testing/mocks/mockMovies.js',
+            'public/scripts/components/**/*.spec.js',
+            'public/scripts/app/*.spec.js'
         ],
 
         // list of files to exclude
