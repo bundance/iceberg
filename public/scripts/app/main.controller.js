@@ -20,7 +20,7 @@
             }
         };
 
-        // Initialise controller's model
+        // Initialise controller's ViewModel
         vm.model = {
             page: 1,
             pages: [],
@@ -77,13 +77,6 @@
                     sortIconNone: 'glyphicon glyphicon-resize-vertical'
                 }
             });
-        }
-
-        function toggleSort(sortParams) {
-            return vm.paginator.toggleSort(sortParams.columnName, vm.model.filters)
-                .then(function () {
-                    return {icon: vm.paginator.getSortIcon(sortParams.columnName)};
-                })
         }
 
     }
