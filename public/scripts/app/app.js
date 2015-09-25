@@ -6,9 +6,8 @@
             'ngResource',
             'ngSanitize',
             'ngRoute',
-            'rest.moviesJsonApi',   // change this to whatever ReST service you're using
-            'momUI.momPaginator',
-            'ui.bootstrap-slider'
+            'moviesData',
+            'momUI.momPaginator'
         ])
         .config(function ($routeProvider) {
             $routeProvider

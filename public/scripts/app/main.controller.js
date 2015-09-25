@@ -5,9 +5,9 @@
         .module('app')
         .controller('MainController', MainController);
 
-    MainController.$inject = ['$scope', 'momPaginator', 'moviesJsonData'];
+    MainController.$inject = ['$scope', 'momPaginator', 'moviesData'];
 
-    function MainController($scope, momPaginator, moviesJsonData) {
+    function MainController($scope, momPaginator, moviesData) {
 
         var vm = this;
 
@@ -20,30 +20,24 @@
             }
         };
 
-        // Initialise controller's model
+        // Initialise controller's ViewModel
         vm.model = {
             page: 1,
             pages: [],
             filterText: '',
-            filters: []
+            filters: [],
+            showNoMoviesMessage: false
         };
 
         // Setup the Paginator
         vm.paginator = getPaginator();
-        // Enable sorting
-        vm.toggleSort = toggleSort;
-        // Enable filtering
-        vm.applyFilter = applyFilter;
-        vm.filterBy = {};
-        vm.showNoMoviesMessage = false;
 
         vm.filterMovies = _.debounce(function(){
             vm.paginator.getPage(1, 'title', 'asc', filterFns)
                 .then(function(data){
-                    vm.showNoMoviesMessage = (data.length === 0);
+                    vm.model.showNoMoviesMessage = (data.length === 0);
                 });
         }, 5);
-        // Initialise the price range sorter
 
         // Initialisation
         activate();
@@ -74,7 +68,7 @@
 
         function getPaginator() {
             return momPaginator({
-                restSvc: moviesJsonData,
+                restSvc: moviesData,
                 initialPage: 1,
                 itemsPerPage: 20,
                 sortIcons: {
@@ -84,18 +78,6 @@
                 }
             });
         }
-
-        function toggleSort(sortParams) {
-            return vm.paginator.toggleSort(sortParams.columnName, vm.model.filters)
-                .then(function () {
-                    return {icon: vm.paginator.getSortIcon(sortParams.columnName)};
-                })
-        }
-
-        function applyFilter(){
-            vm.paginator.getPage(1, 'title', 'asc', filterFns);
-        }
-
 
     }
 })();
