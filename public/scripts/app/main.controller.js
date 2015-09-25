@@ -32,14 +32,10 @@
         // Setup the Paginator
         vm.paginator = getPaginator();
 
-        // Enable sorting
-        vm.toggleSort = toggleSort;
-
-
         vm.filterMovies = _.debounce(function(){
             vm.paginator.getPage(1, 'title', 'asc', filterFns)
                 .then(function(data){
-                    vm.showNoMoviesMessage = (data.length === 0);
+                    vm.model.showNoMoviesMessage = (data.length === 0);
                 });
         }, 5);
 
